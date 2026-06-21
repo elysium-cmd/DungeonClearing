@@ -11,31 +11,39 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
 
+        self.playerX = 5
+        self.playerY = 9
+
+        # map start
+        self.grid = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+        self.grid[self.playerY][self.playerX] = 1
+
         # groups
         self.all_sprites = pygame.sprite.Group()
 
         # load
-        self.grid()
+        self.populateGrid()
 
-    def grid(self):
+    def populateGrid(self):
         # initial position
         x = 0
         y = 0
-        grid = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]]
 
-        for row in grid:
+        for row in self.grid:
             for spot in row:
                 if spot == 0:
-                    GridBlock((x, y), self.all_sprites)
+                    GridBlock((x, y), self.all_sprites, "grey")
+                elif spot == 1:
+                    GridBlock((x, y), self.all_sprites, "black")
                 x += 46
             x = 0
             y += 46
@@ -48,7 +56,27 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     return
+            keys = pygame.key.get_pressed()
+
+            if keys[pygame.K_a] and self.playerX > 0:
+                self.grid[self.playerY][self.playerX] = 0
+                self.playerX -= 1
+                self.grid[self.playerY][self.playerX] = 1
+            if keys[pygame.K_d] and self.playerX < 10:
+                self.grid[self.playerY][self.playerX] = 0
+                self.playerX += 1
+                self.grid[self.playerY][self.playerX] = 1
+            if keys[pygame.K_w] and self.playerY > 0:
+                self.grid[self.playerY][self.playerX] = 0
+                self.playerY -= 1
+                self.grid[self.playerY][self.playerX] = 1
+            if keys[pygame.K_s] and self.playerY < 9:
+                self.grid[self.playerY][self.playerX] = 0
+                self.playerY += 1
+                self.grid[self.playerY][self.playerX] = 1
+
             # update
+            self.populateGrid()
             self.all_sprites.update()
 
             # draw
