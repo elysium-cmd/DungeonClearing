@@ -1,3 +1,9 @@
 # Window
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
+
+# Game
+FRAMERATE = 60
+
+# Level
+BLOCK_SIZE = 45
